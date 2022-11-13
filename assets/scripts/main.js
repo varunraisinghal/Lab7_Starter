@@ -45,6 +45,34 @@ function initializeServiceWorker() {
   // We first must register our ServiceWorker here before any of the code in
   // sw.js is executed.
   // B1. TODO - Check if 'serviceWorker' is supported in the current browser
+  if ('serviceWorker' in navigator) 
+  {
+    window.addEventListener('load', async (event) => 
+    {
+      try 
+      {
+        const newRegistration = await navigator.serviceWorker.register("/sw.js", 
+        {
+          scope: "/",
+        });
+
+        if (newRegistration.active)
+        {
+          console.log("Registration successful");
+        }
+        
+      } 
+      catch (error) 
+      {
+        console.error(`Registration failed with ${error}`);
+      }
+      
+    });
+  }
+  else
+  {
+    console.log("no service workers");
+  }
   // B2. TODO - Listen for the 'load' event on the window object.
   // Steps B3-B6 will be *inside* the event listener's function created in B2
   // B3. TODO - Register './sw.js' as a service worker (The MDN article
@@ -64,7 +92,48 @@ function initializeServiceWorker() {
  * array is saved to localStorage, and then the array is returned.
  * @returns {Array<Object>} An array of recipes found in localStorage
  */
-async function getRecipes() {
+async function getRecipes() 
+{
+  if (localStorage.recipes !== undefined)
+  {
+    return JSON.parse(localStorage.recipes);
+  }
+  
+  /**************************/
+  // The rest of this method will be concerned with requesting the recipes
+  // from the network
+  // A2. TODO - Create an empty array to hold the recipes that you will fetch
+  let newRecipes = [];
+  // A3. TODO - Return a new Promise. If you are unfamiliar with promises, MDN
+  //            has a great article on them. A promise takes one parameter - A
+  //            function (we call these callback functions). That function will
+  //            take two parameters - resolve, and reject. These are functions
+  //            you can call to either resolve the Promise or Reject it.
+
+  const newPromise = new Promise(async (resolve, reject) => 
+  {
+    for (let i = 0; i < RECIPE_URLS.length; i++)
+    {
+      try
+      {
+        const newFetch = await fetch(RECIPE_URLS[i])
+          .then(async (response) => await response.json());
+
+        newRecipes.push(newFetch);
+
+        if (newRecipes.length == RECIPE_URLS.length)
+        {
+          saveRecipesToStorage(newRecipes);
+          resolve(newRecipes);
+        }
+      }
+      catch (exception)
+      {
+        console.log(exception);
+        reject(exception);
+      }
+    }
+  });
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
