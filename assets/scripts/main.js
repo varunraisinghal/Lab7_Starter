@@ -50,6 +50,7 @@ function initializeServiceWorker() {
     console.error("No workers");
     return;
   }
+
   window.addEventListener('load', async (event) => 
   {
     try 
@@ -92,9 +93,9 @@ function initializeServiceWorker() {
  */
 async function getRecipes() 
 {
-  if (localStorage.recipes !== undefined)
+  if (JSON.parse(localStorage.getItem('recipes')) != null)
   {
-    return JSON.parse(localStorage.recipes);
+    return JSON.parse(localStorage.getItem('recipes'));
   }
   
   /**************************/
