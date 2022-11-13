@@ -53,7 +53,7 @@ function initializeServiceWorker() {
       {
         const newRegistration = await navigator.serviceWorker.register("./sw.js", 
         {
-          scope: "/",
+          scope: "./",
         });
 
         if (newRegistration.active)
