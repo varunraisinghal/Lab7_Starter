@@ -95,9 +95,9 @@ function initializeServiceWorker() {
  */
 async function getRecipes() 
 {
-  if (localStorage.recipes != undefined)
+  if (JSON.parse(localStorage.getItem('recipes')).length > 0)
   {
-    return JSON.parse(localStorage.recipes);
+    return JSON.parse(localStorage.getItem('recipes'));
   }
   
   /**************************/
@@ -117,10 +117,10 @@ async function getRecipes()
     {
       try
       {
-        const newFetch = await fetch(RECIPE_URLS[i])
-          .then(async (response) => await response.json());
+        const newFetch = await fetch(RECIPE_URLS[i]);
+        const newRetrieval = await newFetch.json();
 
-        newRecipes.push(newFetch);
+        newRecipes.push(newRetrieval);
 
       }
       catch (exception)
@@ -131,6 +131,7 @@ async function getRecipes()
     }
     saveRecipesToStorage(newRecipes);
     resolve(newRecipes);
+    
   });
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
