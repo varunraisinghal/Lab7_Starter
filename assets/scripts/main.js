@@ -18,6 +18,7 @@ window.addEventListener('DOMContentLoaded', init);
 async function init() {
   // initialize ServiceWorker
   initializeServiceWorker();
+  console.log("h");
   // Get the recipes from localStorage
   let recipes;
   try {
@@ -95,7 +96,7 @@ function initializeServiceWorker() {
  */
 async function getRecipes() 
 {
-  if (JSON.parse(localStorage.getItem('recipes')).length > 0)
+  if (JSON.parse(localStorage.getItem('recipes')) != null)
   {
     return JSON.parse(localStorage.getItem('recipes'));
   }
