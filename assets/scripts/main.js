@@ -95,7 +95,7 @@ function initializeServiceWorker() {
  */
 async function getRecipes() 
 {
-  if (localStorage.recipes !== undefined)
+  if (localStorage.recipes != undefined)
   {
     return JSON.parse(localStorage.recipes);
   }
@@ -111,7 +111,7 @@ async function getRecipes()
   //            take two parameters - resolve, and reject. These are functions
   //            you can call to either resolve the Promise or Reject it.
 
-  const newPromise = new Promise(async (resolve, reject) => 
+  return new Promise(async (resolve, reject) => 
   {
     for (let i = 0; i < RECIPE_URLS.length; i++)
     {
@@ -122,11 +122,6 @@ async function getRecipes()
 
         newRecipes.push(newFetch);
 
-        if (newRecipes.length == RECIPE_URLS.length)
-        {
-          saveRecipesToStorage(newRecipes);
-          resolve(newRecipes);
-        }
       }
       catch (exception)
       {
@@ -134,6 +129,8 @@ async function getRecipes()
         reject(exception);
       }
     }
+    saveRecipesToStorage(newRecipes);
+    resolve(newRecipes);
   });
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
