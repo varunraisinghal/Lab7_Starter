@@ -18,7 +18,6 @@ window.addEventListener('DOMContentLoaded', init);
 async function init() {
   // initialize ServiceWorker
   initializeServiceWorker();
-  console.log("h");
   // Get the recipes from localStorage
   let recipes;
   try {
@@ -112,7 +111,7 @@ async function getRecipes()
   //            take two parameters - resolve, and reject. These are functions
   //            you can call to either resolve the Promise or Reject it.
 
-  return new Promise(async (resolve, reject) => 
+  new Promise(async (resolve, reject) => 
   {
     for (let i = 0; i < RECIPE_URLS.length; i++)
     {
